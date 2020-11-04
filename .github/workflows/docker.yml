@@ -13,16 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Login to docker.pkg.github.com
+      - name: Login to ghcr.io
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build the Docker image
         run: |
           docker build \
-            --tag docker.pkg.github.com/${{ github.repository }}/docker-telegram-bot-api:latest \
+            --tag ghcr.io/bots-house/docker-telegram-bot-api:latest \
             .
 
       - name: Push image to GitHub Packages
         run: |
-          docker push docker.pkg.github.com/${{ github.repository }}/docker-telegram-bot-api:latest
+          docker push ghcr.io/bots-house/docker-telegram-bot-api:latest

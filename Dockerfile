@@ -13,7 +13,7 @@ RUN git clone --recursive https://github.com/tdlib/telegram-bot-api.git /src
 WORKDIR /src/build
 
 RUN cmake -DCMAKE_BUILD_TYPE=Release ..
-RUN cmake --build . --target install -- -j 4
+RUN cmake --build . --target install --
 
 FROM alpine:3.12.1
 
