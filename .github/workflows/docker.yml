@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to docker.pkg.github.com
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Build the Docker image
+        run: |
+          docker build \
+            --tag docker.pkg.github.com/${{ github.repository }}/docker-telegram-bot-api:latest \
+            .
+
+      - name: Push image to GitHub Packages
+        run: |
+          docker push docker.pkg.github.com/${{ github.repository }}/docker-telegram-bot-api:latest
