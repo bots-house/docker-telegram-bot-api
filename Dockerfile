@@ -2,13 +2,13 @@ FROM alpine:3.12.1 as builder
 
 RUN apk --no-cache add \
     build-base \
-    git cmake \
+    cmake \
     openssl-dev \
     zlib-dev \
     gperf \
     linux-headers
 
-RUN git clone --recursive https://github.com/tdlib/telegram-bot-api.git /src
+COPY telegram-bot-api /src
 
 WORKDIR /src/build
 
