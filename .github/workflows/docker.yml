@@ -3,9 +3,11 @@ name: CI
 on:
   push:
     branches:
-      - tagged-images
-    # paths:
-    #   - Dockerfile
+      - master
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - .github/workflows/docker.yml
   schedule:
     # at 00:00 on every 3rd day-of-month.
     - cron: '0 0 */3 * *'
@@ -51,7 +53,7 @@ jobs:
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
 
-      # - name: Push images
-      #   run: |
-      #     docker push ghcr.io/bots-house/docker-telegram-bot-api:latest
-      #     docker push ghcr.io/bots-house/docker-telegram-bot-api:$version
+      - name: Push images
+        run: |
+          docker push ghcr.io/bots-house/docker-telegram-bot-api:latest
+          docker push ghcr.io/bots-house/docker-telegram-bot-api:$version
