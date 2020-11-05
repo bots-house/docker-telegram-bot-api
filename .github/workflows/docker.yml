@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - tagged-images
     paths:
       - Dockerfile
   schedule:
@@ -14,20 +14,44 @@ jobs:
   build:
     name: Build Image
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout current repo  
+        uses: actions/checkout@v2
 
-      - name: Login to ghcr.io
+      - name: Checkout upstream repo 
+        uses: actions/checkout@v2
+        with:
+          repository: tdlib/telegram-bot-api
+          path: telegram-bot-api
+          submodules: recursive
+      
+      - name: Get Version
         run: |
-          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          # get telegram bot api version
+          telegram_bot_api_version=$(cd telegram-bot-api && git rev-parse --short HEAD)
+          
+          # get tdlib version 
+          tdlib_version=$(cd telegram-bot-api/td && git rev-parse --short HEAD)
+          
+          # concat tdlib and telegram bot api version
+          version=$telegram_bot_api_version-$tdlib_version
 
-      - name: Build the Docker image
+          # store variable for future use
+          echo "version=$version" >> $GITHUB_ENV
+ 
+      - name: Build image
         run: |
           docker build \
             --tag ghcr.io/bots-house/docker-telegram-bot-api:latest \
+            --tag ghcr.io/bots-house/docker-telegram-bot-api:$version \
             .
 
-      - name: Push image to GitHub Packages
+      - name: Login to registry
+        run: |
+          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+
+
+      - name: Push images
         run: |
           docker push ghcr.io/bots-house/docker-telegram-bot-api:latest
+          docker push ghcr.io/bots-house/docker-telegram-bot-api:$version
