@@ -1,0 +1,5 @@
+# ignore everything 
+**
+
+# allow only following files
+!/telegram-bot-api

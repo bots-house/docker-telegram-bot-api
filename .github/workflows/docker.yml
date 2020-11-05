@@ -51,7 +51,7 @@ jobs:
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
 
-      - name: Push images
-        run: |
-          docker push ghcr.io/bots-house/docker-telegram-bot-api:latest
-          docker push ghcr.io/bots-house/docker-telegram-bot-api:$version
+      # - name: Push images
+      #   run: |
+      #     docker push ghcr.io/bots-house/docker-telegram-bot-api:latest
+      #     docker push ghcr.io/bots-house/docker-telegram-bot-api:$version
