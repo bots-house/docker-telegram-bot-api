@@ -15,7 +15,7 @@ services:
   server:
     image: ghcr.io/bots-house/docker-telegram-bot-api:latest
     environment: 
-      # get this values from https://tdlib.github.io/telegram-bot-api/build.html
+      # get this values from https://core.telegram.org/api/obtaining_api_id
       TELEGRAM_API_ID: ?
       TELEGRAM_API_HASH: ?
     command: 
