@@ -3,7 +3,7 @@
 It's just image and CI pipline for build [tdlib/telegram-bot-api](https://github.com/tdlib/telegram-bot-api). 
 
  - 🧙 no magic, contains only build stage with binary entrypoint; 
- - 🕔 [automatic image rebuild](https://github.com/bots-house/docker-telegram-bot-api/blob/master/.github/workflows/docker.yml#L11) from upstream every three days;
+ - 🔄 trigger build when someone push to upstream repository (via [github-actions-upstream-watch](https://github.com/bots-house/github-actions-upstream-watch))
 
 ## Docker Compose
 
