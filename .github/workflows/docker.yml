@@ -6,6 +6,9 @@ on:
       - master
     paths:
       - Dockerfile
+  schedule:
+    # at 00:00 on every 3rd day-of-month.
+    - cron: '0 0 */3 * *'
 
 jobs:
   build:
