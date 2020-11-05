@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - tagged-images
-    paths:
-      - Dockerfile
+    # paths:
+    #   - Dockerfile
   schedule:
     # at 00:00 on every 3rd day-of-month.
     - cron: '0 0 */3 * *'
