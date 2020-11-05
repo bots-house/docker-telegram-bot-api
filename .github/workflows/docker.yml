@@ -8,9 +8,9 @@ on:
       - Dockerfile
       - .dockerignore
       - .github/workflows/docker.yml
-  schedule:
-    # at 00:00 on every 3rd day-of-month.
-    - cron: '0 0 */3 * *'
+  repository_dispatch:
+    # this event is submited via github.com/bots-house/github-actions-upstream-watch
+    types: upstream_commit
 
 jobs:
   build:
