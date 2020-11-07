@@ -60,3 +60,7 @@ Telegram Bot API server. Options:
   -c, --max-connections=<arg>         maximum number of open file descriptors
       --proxy=<arg>                   HTTP proxy server for outgoing webhook requests in the format http://host:port
 ```
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
