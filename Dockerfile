@@ -8,19 +8,36 @@ RUN apk --no-cache add \
     gperf \
     linux-headers
 
-COPY telegram-bot-api /src
+WORKDIR /usr/src/telegram-bot-api
 
-WORKDIR /src/build
+COPY upstream/CMakeLists.txt .
+COPY upstream/td ./td
+COPY upstream/telegram-bot-api ./telegram-bot-api
 
-RUN cmake -DCMAKE_BUILD_TYPE=Release ..
-RUN cmake --build . --target install --
+WORKDIR /usr/src/telegram-bot-api
+
+RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. .. \
+ && cmake --build . --target install -j "$(nproc)"\
+ && strip /usr/src/telegram-bot-api/bin/telegram-bot-api
 
 FROM alpine:3.12.1
 
-RUN apk --no-cache add libstdc++
+RUN apk --no-cache --update add \
+    libstdc++ \
+    openssl
 
-COPY --from=builder /usr/local/bin/telegram-bot-api /usr/local/bin/telegram-bot-api
+COPY --from=builder \
+    /usr/src/telegram-bot-api/bin/telegram-bot-api \
+    /usr/local/bin/telegram-bot-api
 
-EXPOSE 8081
+# 8081 - default bot api port 
+# 8082 - default stats port 
+EXPOSE 8081/tcp 8082/tcp
+
+HEALTHCHECK \
+    --interval=5s \
+    --timeout=30s \
+    --retries=3 \
+    CMD nc -z localhost 8081 || exit 1
 
 ENTRYPOINT ["/usr/local/bin/telegram-bot-api"]
