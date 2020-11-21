@@ -14,7 +14,7 @@ COPY upstream/CMakeLists.txt .
 COPY upstream/td ./td
 COPY upstream/telegram-bot-api ./telegram-bot-api
 
-WORKDIR /usr/src/telegram-bot-api
+WORKDIR /usr/src/telegram-bot-api/build
 
 RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. .. \
  && cmake --build . --target install -j "$(nproc)"\
