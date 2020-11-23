@@ -24,16 +24,16 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: tdlib/telegram-bot-api
-          path: telegram-bot-api
+          path: upstream
           submodules: recursive
       
       - name: Get Version
         run: |
           # get telegram bot api version
-          telegram_bot_api_version=$(cd telegram-bot-api && git rev-parse --short HEAD)
+          telegram_bot_api_version=$(cd upstream && git rev-parse --short HEAD)
           
           # get tdlib version 
-          tdlib_version=$(cd telegram-bot-api/td && git rev-parse --short HEAD)
+          tdlib_version=$(cd upstream/td && git rev-parse --short HEAD)
           
           # concat tdlib and telegram bot api version
           version=$telegram_bot_api_version-$tdlib_version
@@ -51,7 +51,6 @@ jobs:
       - name: Login to registry
         run: |
           echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-
 
       - name: Push images
         run: |
