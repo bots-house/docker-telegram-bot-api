@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - refactor-dockerfile
+      - master
     paths:
       - Dockerfile
       - .dockerignore
@@ -48,11 +48,11 @@ jobs:
             --tag ghcr.io/bots-house/docker-telegram-bot-api:$version \
             .
 
-      # - name: Login to registry
-      #   run: |
-      #     echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+      - name: Login to registry
+        run: |
+          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
-      # - name: Push images
-      #   run: |
-      #     docker push ghcr.io/bots-house/docker-telegram-bot-api:latest
-      #     docker push ghcr.io/bots-house/docker-telegram-bot-api:$version
+      - name: Push images
+        run: |
+          docker push ghcr.io/bots-house/docker-telegram-bot-api:latest
+          docker push ghcr.io/bots-house/docker-telegram-bot-api:$version
