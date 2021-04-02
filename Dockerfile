@@ -1,4 +1,4 @@
-FROM alpine:3.12.3 as builder
+FROM alpine:3.13.4 as builder
 
 RUN apk --no-cache add \
     build-base \
@@ -20,7 +20,7 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. .. \
  && cmake --build . --target install -j "$(nproc)"\
  && strip /usr/src/telegram-bot-api/bin/telegram-bot-api
 
-FROM alpine:3.12.3
+FROM alpine:3.13.4
 
 RUN apk --no-cache --update add \
     libstdc++ \
