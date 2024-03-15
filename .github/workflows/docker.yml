@@ -9,43 +9,44 @@ on:
       - .dockerignore
       - .github/workflows/docker.yml
   repository_dispatch:
-    # this event is submited via github.com/alexandervnuchkov/github-actions-upstream-watch
     types: upstream_commit
+#  schedule:
+#    - cron: '0 0 * * *'
 
 jobs:
   build:
     name: Build Image
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout current repo  
+      - name: Checkout current repo
         uses: actions/checkout@v4
 
-      - name: Checkout upstream repo 
+      - name: Checkout upstream repo
         uses: actions/checkout@v4
         with:
           repository: tdlib/telegram-bot-api
           path: upstream
           submodules: recursive
-      
+
       - name: Get Version
         run: |
           # get telegram bot api version
           telegram_bot_api_version=$(cd upstream && git rev-parse --short HEAD)
-          
-          # get tdlib version 
+
+          # get tdlib version
           tdlib_version=$(cd upstream/td && git rev-parse --short HEAD)
-          
+
           # concat tdlib and telegram bot api version
           version=$telegram_bot_api_version-$tdlib_version
 
           # store variable for future use
           echo "version=$version" >> $GITHUB_ENV
- 
+
       - name: Build image
         run: |
           docker build \
-            --tag ghcr.io/alexandervnuchkov/docker-telegram-bot-api:latest \
-            --tag ghcr.io/alexandervnuchkov/docker-telegram-bot-api:$version \
+            --tag ghcr.io/alexandervnuchkov/telegram-bot-api:$version \
+            --tag ghcr.io/alexandervnuchkov/telegram-bot-api:latest \
             .
 
       - name: Login to registry
@@ -54,10 +55,8 @@ jobs:
           registry: ghcr.io
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
-#        run: |
-#          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
       - name: Push images
         run: |
-          docker push ghcr.io/alexandervnuchkov/docker-telegram-bot-api:latest
-          docker push ghcr.io/alexandervnuchkov/docker-telegram-bot-api:$version
+          docker push ghcr.io/alexandervnuchkov/telegram-bot-api:$version
+          docker push ghcr.io/alexandervnuchkov/telegram-bot-api:latest
