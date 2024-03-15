@@ -9,7 +9,7 @@ on:
       - .dockerignore
       - .github/workflows/docker.yml
   repository_dispatch:
-    # this event is submited via github.com/bots-house/github-actions-upstream-watch
+    # this event is submited via github.com/alexandervnuchkov/github-actions-upstream-watch
     types: upstream_commit
 
 jobs:
@@ -44,8 +44,8 @@ jobs:
       - name: Build image
         run: |
           docker build \
-            --tag ghcr.io/bots-house/docker-telegram-bot-api:latest \
-            --tag ghcr.io/bots-house/docker-telegram-bot-api:$version \
+            --tag ghcr.io/alexandervnuchkov/docker-telegram-bot-api:latest \
+            --tag ghcr.io/alexandervnuchkov/docker-telegram-bot-api:$version \
             .
 
       - name: Login to registry
@@ -54,5 +54,5 @@ jobs:
 
       - name: Push images
         run: |
-          docker push ghcr.io/bots-house/docker-telegram-bot-api:latest
-          docker push ghcr.io/bots-house/docker-telegram-bot-api:$version
+          docker push ghcr.io/alexandervnuchkov/docker-telegram-bot-api:latest
+          docker push ghcr.io/alexandervnuchkov/docker-telegram-bot-api:$version
